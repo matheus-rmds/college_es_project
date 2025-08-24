@@ -125,8 +125,7 @@ function Dashboard() {
           </div>
         </div>
       )}
-
-      
+      <div className='footer-space'></div>    
     </div>
   );
 }
