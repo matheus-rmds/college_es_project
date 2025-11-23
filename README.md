@@ -2,10 +2,10 @@
 cd backend  
 python -m venv venv  
 .\venv\Scripts\activate  
-pip install -r requirements.txt  
+pip install -r requirements.txt (apenas na primeira vez)  
 python app.py  
 
 # Rodar Frontend
 cd frontend  
-npm install  
+npm install (apenas na primeira vez)  
 npm start
