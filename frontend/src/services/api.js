@@ -1,20 +1,86 @@
-// src/api.js
-import axios from 'axios';
+// src/services/api.js
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
 
-const api = axios.create({
-  baseURL: 'http://localhost:5000', // URL do backend Flask
-});
+function getToken() {
+  return localStorage.getItem('access_token');
+}
 
-// Funções de registro e login
-export const registerUser = (data) => api.post('/register', data);
-export const loginUser = (data) => api.post('/login', data);
+function getAuthHeaders() {
+  const token = getToken();
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
 
-// Funções para listar classes, disciplinas, alunos e notas
-export const listClasses = () => api.get('/api/classes');
-export const listSubjects = () => api.get('/api/subjects');
-export const listScores = () => api.get('/api/scores');
-export const listStudents = () => api.get('/api/students');
+async function handleResponse(res) {
+  const contentType = res.headers.get('content-type');
+  const json = contentType && contentType.includes('application/json') ? await res.json() : null;
+  if (!res.ok) {
+    const message = json && json.error ? json.error : `HTTP error ${res.status}`;
+    const err = new Error(message);
+    err.status = res.status;
+    err.body = json;
+    throw err;
+  }
+  return json;
+}
 
-export const updateScores = (studentId, data) => api.put(`/api/update_scores/${studentId}`, data);
+export async function login(username, password) {
+  const res = await fetch(`${API_BASE}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+  return handleResponse(res);
+}
 
-export default api;
+export async function register(payload) {
+  const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() };
+  const res = await fetch(`${API_BASE}/register`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload)
+  });
+  return handleResponse(res);
+}
+
+export async function listClasses() {
+  const res = await fetch(`${API_BASE}/api/classes`, {
+    method: 'GET',
+    headers: { ...getAuthHeaders() }
+  });
+  return handleResponse(res);
+}
+
+export async function listSubjects() {
+  const res = await fetch(`${API_BASE}/api/subjects`, {
+    method: 'GET',
+    headers: { ...getAuthHeaders() }
+  });
+  return handleResponse(res);
+}
+
+export async function listStudents() {
+  const res = await fetch(`${API_BASE}/api/students`, {
+    method: 'GET',
+    headers: { ...getAuthHeaders() }
+  });
+  return handleResponse(res);
+}
+
+export async function listScores() {
+  const res = await fetch(`${API_BASE}/api/scores`, {
+    method: 'GET',
+    headers: { ...getAuthHeaders() }
+  });
+  return handleResponse(res);
+}
+
+// Atualizar notas (PATCH) - para professores/admin (não usado pelo admin-read-only view)
+export async function updateScores(studentId, subject, scores) {
+  const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() };
+  const res = await fetch(`${API_BASE}/api/scores/${studentId}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify({ subject, scores })
+  });
+  return handleResponse(res);
+}

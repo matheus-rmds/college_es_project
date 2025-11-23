@@ -1,6 +1,8 @@
+// src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'; // Importa o arquivo CSS
+import './Login.css';
+import { login } from '../services/api';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -9,20 +11,14 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const response = await fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    });
-    
-    if (response.ok) {
-      const userData = await response.json(); // Obtém os dados do usuário
-      navigate('/dashboard', { state: { user: userData } }); // Passa os dados do usuário para o dashboard
-    } else {
-      alert('Login falhou. Verifique suas credenciais.');
+    try {
+      const data = await login(username, password);
+      // data: { access_token, user }
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      navigate('/dashboard', { state: { user: data.user } });
+    } catch (err) {
+      alert(err.message || 'Login falhou. Verifique suas credenciais.');
     }
   };
 
@@ -36,6 +32,7 @@ function Login() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="login-input"
+          required
         />
         <input
           type="password"
@@ -43,6 +40,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="login-input"
+          required
         />
         <button type="submit" className="login-button">Login</button>
       </form>

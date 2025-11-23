@@ -1,5 +1,7 @@
+// src/components/Register.js
 import React, { useEffect, useState } from 'react';
-import './Register.css'; // Importa o arquivo CSS
+import './Register.css';
+import { listClasses, listSubjects, register } from '../services/api';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -12,27 +14,19 @@ function Register() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchClasses = async () => {
+    const fetch = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/classes');
-        const data = await response.json();
-        setClasses(data);
+        const cls = await listClasses();
+        setClasses(cls);
+        const subs = await listSubjects();
+        setSubjects(subs);
       } catch (error) {
-        console.error('Error fetching classes:', error);
+        console.error('Error fetching classes/subjects:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
-    const fetchSubjects = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/subjects');
-        const data = await response.json();
-        setSubjects(data);
-      } catch (error) {
-        console.error('Error fetching subjects:', error);
-      }
-    };
-
-    Promise.all([fetchClasses(), fetchSubjects()]).finally(() => setLoading(false));
+    fetch();
   }, []);
 
   useEffect(() => {
@@ -43,33 +37,21 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          role,
-          class: role === 'student' ? selectedClass : undefined,
-          subject: role === 'teacher' ? selectedSubject : undefined
-        })
+      await register({
+        username,
+        password,
+        role,
+        class: role === 'student' ? selectedClass : undefined,
+        subject: role === 'teacher' ? selectedSubject : undefined
       });
-
-      if (response.ok) {
-        alert('Registro feito com sucesso!');
-        setUsername('');
-        setPassword('');
-        setRole('');
-        setSelectedClass('');
-        setSelectedSubject('');
-      } else {
-        alert('Erro ao registrar. Verifique os dados.');
-      }
+      alert('Registro feito com sucesso!');
+      setUsername('');
+      setPassword('');
+      setRole('');
+      setSelectedClass('');
+      setSelectedSubject('');
     } catch (error) {
-      console.error('Error during registration:', error);
-      alert('Erro ao registrar. Tente novamente.');
+      alert('Erro ao registrar. ' + (error.message || 'Tente novamente.'));
     }
   };
 

@@ -1,3 +1,4 @@
+// src/components/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { listScores, listClasses } from '../services/api';
@@ -6,15 +7,21 @@ import './Dashboard.css';
 function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = location.state || {};
+  const initialUser = location.state?.user || JSON.parse(localStorage.getItem('user') || 'null');
+  const [user, setUser] = useState(initialUser);
   const [scores, setScores] = useState([]);
-  const [classes, setClasses] = useState([]); // Estado para armazenar as turmas
+  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     const fetchScores = async () => {
       try {
-        const response = await listScores();        
-        const filteredScores = response.data.filter(scoreItem => scoreItem.student === user?._id);
+        const response = await listScores();
+        const filteredScores = response.filter(scoreItem => scoreItem.student === user._id);
         setScores(filteredScores);
       } catch (error) {
         console.error('Erro ao buscar scores:', error);
@@ -23,8 +30,8 @@ function Dashboard() {
 
     const fetchClasses = async () => {
       try {
-        const response = await listClasses(); // Chamada para listar turmas
-        setClasses(response.data); // Armazena todas as turmas, sem filtragem
+        const response = await listClasses();
+        setClasses(response);
       } catch (error) {
         console.error('Erro ao buscar turmas:', error);
       }
@@ -32,18 +39,24 @@ function Dashboard() {
 
     fetchScores();
     fetchClasses();
-  }, [user?._id]);
+  }, [user, navigate]);
 
   const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
   const handleClassClick = (classInfo) => {
-    navigate('/class', { state: { classInfo, subject: user?.subject } });
+    // Mantemos comportamento: passamos classInfo; a Class component detecta o papel do usuário.
+    // Para professores, a subject continua sendo user.subject (se existir).
+    const userFromStorage = JSON.parse(localStorage.getItem('user') || 'null');
+    const subject = userFromStorage?.subject || null;
+    navigate('/class', { state: { classInfo, subject } });
   };
 
   const handleRegisterClick = () => {
-    navigate('/register'); // Navega para a tela de registro
+    navigate('/register');
   };
 
   return (
@@ -56,7 +69,6 @@ function Dashboard() {
         </div>
       </header>
 
-      {/* Card para o admin acessar a tela de registro */}
       {user?.role === 'admin' && (
         <div className='admin-register-card' onClick={handleRegisterClick}>
           <h3>Acessar Tela de Registro</h3>
@@ -79,26 +91,26 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {scores.map((scoreItem, index) => (
-                Object.entries(scoreItem.scores).map(([subject, scores]) => {
-                  const validScores = scores.filter(score => score !== null);
-                  const average = validScores.length > 0 ? (validScores.reduce((sum, score) => sum + score, 0) / validScores.length).toFixed(2) : 'Sem nota';
+              {scores.flatMap((scoreItem, index) =>
+                Object.entries(scoreItem.scores || {}).map(([subject, sArr]) => {
+                  const scoresArr = Array.isArray(sArr) ? sArr : [];
+                  const validScores = scoresArr.filter(sc => sc !== null);
+                  const average = validScores.length > 0 ? (validScores.reduce((sum, sc) => sum + sc, 0) / validScores.length).toFixed(2) : 'Sem nota';
 
                   return (
                     <tr key={`${subject}-${index}`}>
                       <td>{subject}</td>
-                      {scores.map((score, scoreIndex) => (
+                      {scoresArr.map((score, scoreIndex) => (
                         <td key={scoreIndex}>{score !== null ? score : 'Sem nota'}</td>
                       ))}
-                      {Array.from({ length: 4 - scores.length }).map((_, emptyIndex) => (
+                      {Array.from({ length: Math.max(0, 4 - scoresArr.length) }).map((_, emptyIndex) => (
                         <td key={`empty-${emptyIndex}`}>Sem nota</td>
                       ))}
                       <td>{average}</td>
                     </tr>
                   );
                 })
-              ))}
-
+              )}
             </tbody>
           </table>
         </div>

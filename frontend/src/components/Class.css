@@ -1,77 +1,117 @@
 /* Estilos para o container da classe */
 .class-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
   
-  .class-container h1 {
-    font-size: 24px;
-    color: #343a40;
-    margin-bottom: 10px;
-  }
-  
-  .class-container h2 {
-    font-size: 20px;
-    color: #495057;
-    margin-bottom: 15px;
-  }
-  
-  .class-container h3 {
-    font-size: 18px;
-    color: #007bff;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .class-container ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .class-container li {
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    padding: 20px;
-    margin-bottom: 10px;
-    transition: background-color 0.3s;
-  }
-  
-  .class-container li:hover {
-    background-color: #f1f1f1;
-  }
-  
-  /* Estilos para o container das notas */
-  .scores-container {
-    display: flex; /* Usando flexbox para alinhar os itens */
-    gap: 10px; /* Espaço entre as notas */
-    margin-top: 5px; /* Margem superior para separar do nome do aluno */
-  }
-  
-  /* Estilos para cada nota */
-  .score-item {
-    background-color: #e9ecef; /* Cor de fundo das notas */
-    padding: 8px 10px; /* Espaçamento interno */
-    border-radius: 4px; /* Cantos arredondados */
-    flex: 1; /* Permite que as notas se espalhem igualmente */
-    text-align: center; /* Centraliza o texto */
-  }
-  
-  .edit-button {
-    background-color: #007bff; /* Cor de fundo azul */
-    color: white; /* Cor do texto */
-    border: none; /* Remove a borda padrão */
-    border-radius: 4px; /* Bordas arredondadas */
-    padding: 10px 15px; /* Espaçamento interno do botão */
-    cursor: pointer; /* Mostra que o botão é clicável */
-    font-size: 16px; /* Tamanho da fonte */
-    transition: background-color 0.3s; /* Transição suave para a mudança de cor */
-  }
-  
-  .edit-button:hover {
-    background-color: #0056b3; /* Cor mais escura ao passar o mouse */
-  }
+.class-container h1 {
+  font-size: 24px;
+  color: #343a40;
+  margin-bottom: 10px;
+}
+
+.class-container h2 {
+  font-size: 20px;
+  color: #495057;
+  margin-bottom: 15px;
+}
+
+.class-container h3 {
+  font-size: 18px;
+  color: #007bff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.class-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.class-container li {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.class-container li:hover {
+  background-color: #f1f1f1;
+}
+
+.scores-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.score-item {
+  background-color: #e9ecef;
+  padding: 8px 10px;
+  border-radius: 4px;
+  flex: 1;
+  text-align: center;
+}
+
+.edit-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+.admin-subjects-section {
+  margin-top: 10px;
+}
+
+.admin-subjects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-subject-button {
+  padding: 8px 12px;
+  border: 1px solid #007bff;
+  background: white;
+  color: #007bff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-subject-button.selected {
+  background: #007bff;
+  color: white;
+}
+
+.admin-scores-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.admin-scores-table th, .admin-scores-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.admin-scores-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}

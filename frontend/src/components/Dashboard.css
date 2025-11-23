@@ -1,13 +1,12 @@
 /* src/components/Dashboard.css */
-
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #f0f0f0; /* Cor de fundo do header */
-  border-bottom: 2px solid #ccc; /* Linha de separação */
-  text-align: right; /* Centraliza o conteúdo do header */
+  background-color: #f0f0f0;
+  border-bottom: 2px solid #ccc;
+  text-align: right;
 }
 
 .school-name {
@@ -23,12 +22,12 @@
 
 .dashboard-content {
   padding: 20px;
-  text-align: center; /* Centraliza o conteúdo dentro do dashboard */
+  text-align: center;
 }
 
 .scores-div {
   width: 700px;
-  margin: 0 auto; /* Centraliza a div de notas */
+  margin: 0 auto;
 }
 
 .scoresTitle {
@@ -59,19 +58,19 @@
 }
 
 .classTitle {
-  text-align: center; /* Centraliza o texto horizontalmente */
-  margin: 20px 0; /* Adiciona margem superior e inferior para espaçamento */
+  text-align: center;
+  margin: 20px 0;
 }
 
 .classes-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* centraliza a grade */
+  justify-content: center;
   gap: 16px;
   margin-top: 20px;
-  max-width: calc(3 * 360px + 2 * 16px); /* largura máxima = 3 cards + 2 gaps */
+  max-width: calc(3 * 360px + 2 * 16px);
   margin-left: auto;
-  margin-right: auto; /* centraliza o container na página */
+  margin-right: auto;
 }
 
 .class-card {
@@ -80,20 +79,20 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
-  width: 320px; /* largura fixa */
+  width: 320px;
   transition: transform 0.2s;
 }
 
 .class-card:hover {
-  transform: scale(1.05); /* Aumenta um pouco o card ao passar o mouse */
+  transform: scale(1.05);
 }
 
 
 .admin-register-card {
-  background-color: #007bff; /* Azul padrão */
+  background-color: #007bff;
   color: white;
   padding: 15px;
-  margin: 20px auto; /* Centraliza o card de registro */
+  margin: 20px auto;
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
@@ -102,7 +101,7 @@
 }
 
 .admin-register-card:hover {
-  background-color: #0056b3; /* Azul escuro ao passar o mouse */
+  background-color: #0056b3;
 }
 
 .footer-space {
