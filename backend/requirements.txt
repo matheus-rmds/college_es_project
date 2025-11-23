@@ -1,3 +1,6 @@
-Flask
-pymongo
+flask
 flask-cors
+pymongo
+werkzeug
+flask-jwt-extended
+python-dotenv
